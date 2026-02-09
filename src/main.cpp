@@ -47,7 +47,7 @@ static const Vertex vertices[3] = {{{-0.6f, -0.4f}, {1.f, 0.f, 0.f}},
                                    {{0.f, 0.6f}, {0.f, 0.f, 1.f}}};
 
 static const char *vertex_shader_text =
-    "version 330\n"
+    "#version 330\n"
     "uniform mat4 MVP;\n"
     "in vec3 vCol;\n"
     "in vec2 vPos;\n"
@@ -100,9 +100,14 @@ int main(void) {
   bgl::setUpDebugger();
   glfwSwapInterval(1);
 
-  bgl::SCOPE = "main";
+  GLint numExtensions;
+  glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
+  std::cout << "- Extensions" << std::endl;
+  for (GLint i = 0; i < numExtensions; i++) {
+    std::cout << glGetStringi(GL_EXTENSIONS, i) << std::endl;
+  }
 
-  // NOTE: OpenGL error checks have been omitted for brevity
+  bgl::SCOPE = "main";
 
   GLuint vertex_buffer;
   glGenBuffers(1, &vertex_buffer);
@@ -110,18 +115,9 @@ int main(void) {
   // bgl::catchError("binding vbo");
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  // const bgl::Shader vertex_shader =
-  //     bgl::createShader(GL_VERTEX_SHADER, vertex_shader_text).unwrapExit();
-  //
-  // const bgl::Shader fragment_shader =
-  //     bgl::createShader(GL_FRAGMENT_SHADER, fragment_shader_text).unwrapExit();
-
-  // const bgl::Program program = glCreateProgram();
-  // glAttachShader(program, vertex_shader);
-  // glAttachShader(program, fragment_shader);
-  // bgl::linkProgram(program);
-
-  bgl::Program program = bgl::createProgram("main program", vertex_shader_text, fragment_shader_text).unwrapExit();
+  bgl::Program program = bgl::createProgram("main program", vertex_shader_text,
+                                            fragment_shader_text)
+                             .unwrapExit();
 
   const GLint mvp_location = glGetUniformLocation(program, "MVP");
   const GLint vpos_location = glGetAttribLocation(program, "vPos");

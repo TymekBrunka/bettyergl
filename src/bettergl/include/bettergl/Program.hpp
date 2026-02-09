@@ -4,7 +4,13 @@
 namespace bgl {
 
 Result<Shader> createShader(GLenum shader_type, const char *source);
+
+Result<Program> createProgram(const char *name,
+                              const char *vertex_shader_source,
+                              const char *fragment_shader_source);
+
 Result<Program> linkProgram(Program program, const char *name = NULL);
-Result<Program> createProgram(const char *name, const char* vertex_shader_source, const char* fragment_shader_source);
+
+std::string validateProgram(Program program);
 
 } // namespace bgl

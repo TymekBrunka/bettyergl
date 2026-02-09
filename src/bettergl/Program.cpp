@@ -5,7 +5,6 @@
 #include <cstdlib>
 #include <sstream>
 #include <string>
-#include <string_view>
 namespace bgl {
 
 Result<Shader> createShader(GLenum shader_type, const char *source) {
@@ -41,39 +40,7 @@ Result<Shader> createShader(GLenum shader_type, const char *source) {
     std::string shader_error_msg;
     shader_error_msg.resize(512);
     glGetShaderInfoLog(shader, 512, NULL, shader_error_msg.data());
-    std::cout << shader_error_msg << "\n";
-
-    size_t separator_pos = shader_error_msg.find_first_of(':');
-    if (separator_pos != -1) {
-      do { // so we can break out
-        // getting indexes needed to retrieve column in shader source
-        size_t location_end_pos =
-            shader_error_msg.find_first_of(':', separator_pos + 1);
-
-        if (location_end_pos == -1)
-          break;
-
-        size_t potential_parentesis_pos = shader_error_msg.find_first_of('(');
-        size_t column_index_end_pos = potential_parentesis_pos;
-        if (potential_parentesis_pos == -1 ||
-            potential_parentesis_pos > location_end_pos) {
-          column_index_end_pos = location_end_pos;
-        }
-
-        std::cout << shader_error_msg.substr(0, column_index_end_pos) << "\n";
-
-        size_t line = atoi(shader_error_msg.substr(0, separator_pos).c_str());
-        size_t column = atoi(shader_error_msg.substr(separator_pos + 1, column_index_end_pos).c_str());
-
-        size_t line_start_index = 0;
-        for (size_t i = 0; i < line; i++) {
-          line_start_index = shader_error_msg.find_first_of('\n', line_start_index) + 1;
-        }
-
-        std::cout << std::string_view(&source[line_start_index], &source[line_start_index + column]);
-
-      } while (false);
-    }
+    error_msg << shader_error_msg << "\n";
     glDeleteShader(shader);
   }
 
@@ -98,6 +65,22 @@ Result<Program> linkProgram(Program program, const char *name) {
   }
 
   return {program, error_msg};
+}
+
+std::string validateProgram(Program program) {
+  glValidateProgram(program);
+  int validation_status;
+  glGetProgramiv(program, GL_VALIDATE_STATUS, &validation_status);
+
+  std::string error_msg;
+  if (!validation_status) {
+    std::string shader_type_s;
+
+    int msg_size = error_msg.size();
+    error_msg.resize(512);
+    glGetProgramInfoLog(program, 512, NULL, error_msg.data());
+  }
+  return error_msg;
 }
 
 // may not result program if shaders fail to compile
