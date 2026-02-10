@@ -1,5 +1,5 @@
 #include "bettergl/Debugging.hpp"
-#include "bettergl/GLTypes.hpp"
+#include <bettergl/GLTypes.hpp>
 #include <bettergl/Program.hpp>
 #include <cstddef>
 #include <cstdlib>
@@ -10,7 +10,8 @@ namespace bgl {
 Result<Shader> createShader(GLenum shader_type, const char *source) {
 
   if (shader_type != GL_VERTEX_SHADER && shader_type != GL_FRAGMENT_SHADER &&
-      shader_type != GL_GEOMETRY_SHADER) {
+      shader_type != GL_GEOMETRY_SHADER &&
+      shader_type != GL_TESS_CONTROL_SHADER) {
     return {0, std::string("shader creation error: invalid enum")};
   }
 
@@ -34,6 +35,9 @@ Result<Shader> createShader(GLenum shader_type, const char *source) {
       break;
     case GL_GEOMETRY_SHADER:
       shader_type_s = "geometry";
+      break;
+    case GL_TESS_CONTROL_SHADER:
+      shader_type_s = "tesselation";
       break;
     }
     error_msg << shader_type_s << " shader linking error: ";
@@ -107,6 +111,9 @@ Result<Program> createProgram(const char *name,
   }
 
   Program program = glCreateProgram();
+  catchError();
+  labelObject(GL_PROGRAM, program, name);
+  catchError();
   glAttachShader(program, vertex_shader_.self);
   glAttachShader(program, fragment_shader_.self);
 

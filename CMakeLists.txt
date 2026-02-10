@@ -8,4 +8,5 @@ target_include_directories(glad PUBLIC glad/include)
 add_subdirectory(src/bettergl)
 
 add_executable(main src/main.cpp)
+# add_executable(main src/opengl_triangle.cpp)
 target_link_libraries(main glad glfw betterGL)

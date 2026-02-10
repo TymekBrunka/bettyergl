@@ -1,11 +1,12 @@
 #include <bettergl/Debugging.hpp>
 namespace bgl {
 
-const char *SCOPE = "";
+std::vector<const char *> SCOPE;
+bool OPENGL_CORE_DBG_SUPPORT = false;
 
 inline void APIENTRY GLDEBUGFUNC(GLenum source_, GLenum type_, GLuint id,
-                          GLenum severity_, GLsizei length,
-                          const GLchar *message, const void *userParam) {
+                                 GLenum severity_, GLsizei length,
+                                 const GLchar *message, const void *userParam) {
   switch (id) {
   case 131185: // glBufferData
     return;
@@ -31,6 +32,18 @@ inline void APIENTRY GLDEBUGFUNC(GLenum source_, GLenum type_, GLuint id,
   case GL_DEBUG_TYPE_PERFORMANCE_ARB:
     type = "\x1b[34mPERF\x1b[0m";
     break;
+  case GL_DEBUG_TYPE_MARKER_KHR:
+    type = "\x1b[35mMARK\x1b[0m";
+    break;
+  case GL_DEBUG_TYPE_PUSH_GROUP_KHR:
+    type = "\x1b[35mPUSH\x1b[0m";
+    break;
+  case GL_DEBUG_TYPE_POP_GROUP_KHR:
+    type = "\x1b[35mPOP\x1b[0m";
+    break;
+  case GL_DEBUG_TYPE_OTHER_ARB:
+    type = "OTHER";
+    break;
   }
 
   switch (severity_) {
@@ -42,6 +55,9 @@ inline void APIENTRY GLDEBUGFUNC(GLenum source_, GLenum type_, GLuint id,
     break;
   case GL_DEBUG_SEVERITY_HIGH_ARB:
     severity = "\x1b[31mH\x1b[0m";
+    break;
+  case GL_DEBUG_SEVERITY_NOTIFICATION_KHR:
+    severity = "\x1b[35mN\x1b[0m";
     break;
   }
 
@@ -66,17 +82,51 @@ inline void APIENTRY GLDEBUGFUNC(GLenum source_, GLenum type_, GLuint id,
     break;
   }
 
-  std::cout << type << "/" << severity << " \x1b[32m[\x1b[33m" << SCOPE
+  std::cout << type << "/" << severity << " \x1b[32m[\x1b[33m" << SCOPE.back()
             << "\x1b[32m]\x1b[0m OpenGL source: \x1b[33m" << source
             << "\x1b[0m message: " << message << "\n";
 }
 
 bool setUpDebugger() {
-  if (GLAD_GL_ARB_debug_output || GLAD_GL_KHR_debug) {
+  if (OPENGL_CORE_DBG_SUPPORT) {
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(GLDEBUGFUNC, NULL);
+  } else if (GLAD_GL_ARB_debug_output || GLAD_GL_KHR_debug) {
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
     glDebugMessageCallbackARB(GLDEBUGFUNC, NULL);
     return true;
   }
   return false;
+}
+
+void labelObject(GLenum type, GLuint object, const char *label,
+                 GLsizei label_lenght) {
+  if (OPENGL_CORE_DBG_SUPPORT)
+    glObjectLabel(type, object, label_lenght, label);
+  else if (GLAD_GL_KHR_debug || GLAD_GL_EXT_debug_label) {
+    glObjectLabelKHR(type, object, label_lenght, label);
+    catchError();
+  }
+}
+
+void beginDebugGroup(GLuint message_id, const char *name, GLsizei name_length) {
+  SCOPE.push_back(name);
+  if (OPENGL_CORE_DBG_SUPPORT)
+    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, message_id, name_length,
+                     name);
+  else if (GLAD_GL_KHR_debug)
+    glPushDebugGroupKHR(GL_DEBUG_SOURCE_APPLICATION_KHR, message_id,
+                        name_length, name);
+}
+
+void endDebugGroup() {
+  SCOPE.pop_back();
+  if (OPENGL_CORE_DBG_SUPPORT)
+    glPopDebugGroup();
+  else if (GLAD_GL_KHR_debug)
+    glPopDebugGroupKHR();
 }
 
 #ifndef BGL_REL_NO_LTO

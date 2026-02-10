@@ -85,6 +85,7 @@ int main(void) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true); 
 
   GLFWwindow *window =
       glfwCreateWindow(640, 480, "OpenGL Triangle", NULL, NULL);
@@ -97,8 +98,8 @@ int main(void) {
 
   glfwMakeContextCurrent(window);
   gladLoadGL(); // only then we can load
-  bgl::setUpDebugger();
   glfwSwapInterval(1);
+  bgl::setUpDebugger();
 
   GLint numExtensions;
   glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
@@ -107,13 +108,13 @@ int main(void) {
     std::cout << glGetStringi(GL_EXTENSIONS, i) << std::endl;
   }
 
-  bgl::SCOPE = "main";
+  bgl::beginDebugGroup(1, "setting up vbo");
 
   GLuint vertex_buffer;
   glGenBuffers(1, &vertex_buffer);
   glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-  // bgl::catchError("binding vbo");
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  bgl::endDebugGroup();
 
   bgl::Program program = bgl::createProgram("main program", vertex_shader_text,
                                             fragment_shader_text)
@@ -122,6 +123,8 @@ int main(void) {
   const GLint mvp_location = glGetUniformLocation(program, "MVP");
   const GLint vpos_location = glGetAttribLocation(program, "vPos");
   const GLint vcol_location = glGetAttribLocation(program, "vCol");
+
+  bgl::beginDebugGroup(1, "setting up vao");
 
   GLuint vertex_array;
   glGenVertexArrays(1, &vertex_array);
@@ -132,11 +135,14 @@ int main(void) {
   glEnableVertexAttribArray(vcol_location);
   glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                         (void *)offsetof(Vertex, col));
+  bgl::endDebugGroup();
 
   while (!glfwWindowShouldClose(window)) {
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     const float ratio = width / (float)height;
+
+    bgl::beginDebugGroup(1, "rendering triangle");
 
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -144,6 +150,8 @@ int main(void) {
     glUseProgram(program);
     glBindVertexArray(vertex_array);
     glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    bgl::endDebugGroup();
 
     glfwSwapBuffers(window);
     glfwPollEvents();
