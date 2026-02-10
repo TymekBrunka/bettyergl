@@ -72,7 +72,7 @@ inline void APIENTRY GLDEBUGFUNC(GLenum source_, GLenum type_, GLuint id,
 }
 
 bool setUpDebugger() {
-  if (GLAD_GL_ARB_debug_output) {
+  if (GLAD_GL_ARB_debug_output || GLAD_GL_KHR_debug) {
     glDebugMessageCallbackARB(GLDEBUGFUNC, NULL);
     return true;
   }

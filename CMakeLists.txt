@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
 project(betterGL LANGUAGES CXX C)
+include(deps/ext.cmake)
 
 add_library(glad glad/src/glad.c)
 target_include_directories(glad PUBLIC glad/include)
-
-find_package(glfw3 REQUIRED)
 
 add_subdirectory(src/bettergl)
 

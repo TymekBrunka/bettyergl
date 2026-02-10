@@ -1,2 +1,0 @@
-/usr/bin/ar qc libbetterGL.a CMakeFiles/betterGL.dir/lib.cpp.o CMakeFiles/betterGL.dir/Debugging.cpp.o CMakeFiles/betterGL.dir/Program.cpp.o
-/usr/bin/ranlib libbetterGL.a

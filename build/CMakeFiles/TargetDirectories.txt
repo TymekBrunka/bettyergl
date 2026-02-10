@@ -1,7 +1,0 @@
-/home/tymek/Documents/kody/bettergl/build/CMakeFiles/glad.dir
-/home/tymek/Documents/kody/bettergl/build/CMakeFiles/main.dir
-/home/tymek/Documents/kody/bettergl/build/CMakeFiles/edit_cache.dir
-/home/tymek/Documents/kody/bettergl/build/CMakeFiles/rebuild_cache.dir
-/home/tymek/Documents/kody/bettergl/build/src/bettergl/CMakeFiles/betterGL.dir
-/home/tymek/Documents/kody/bettergl/build/src/bettergl/CMakeFiles/edit_cache.dir
-/home/tymek/Documents/kody/bettergl/build/src/bettergl/CMakeFiles/rebuild_cache.dir
