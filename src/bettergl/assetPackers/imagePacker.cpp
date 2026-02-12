@@ -48,15 +48,15 @@ int main(int argc, char *argv[]) {
   std::FILE *header = std::fopen(headerpath.c_str(), "w");
   std::fprintf(header,
                "#pragma once\n"
-               "#include \"Texture2d.hpp\"\n"
-               "extern RR::image_data %s;",
+               "#include \"<bettergl\\AssetTypes.hpp>\"\n"
+               "extern bgl::Texture2DResource %s;",
                varname);
   std::fclose(header);
 
   std::FILE *cppfile = std::fopen(cppath.c_str(), "w");
   std::fprintf(cppfile,
                "#include \"%s.hpp\"\n"
-               "RR::image_data %s = {%d, %d, %d, (unsigned char*)\"%s\"};",
+               "bgl::Texture2DResource %s = {%d, %d, %d, (unsigned char*)\"%s\"};",
                output.c_str(), varname, width, height, nrChannels, sb);
   std::fclose(cppfile);
   stbi_image_free(data);
