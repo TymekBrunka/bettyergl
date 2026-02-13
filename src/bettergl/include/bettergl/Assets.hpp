@@ -1,27 +1,52 @@
 #pragma once
+#include <cstdio>
 #include <string>
-#include <type_traits>
 namespace bgl {
+
+struct Texture2DInfo loadImage(const char *filepath, int nrOfChannels = 0);
+
+std::string readFile(const char *filepath);
 
 struct Texture2DInfo {
   int width;
   int height;
   int nrOfChannels;
   unsigned char *data;
+
+  const char *resPath;
+  Texture2DInfo &getRes() {
+    if (resPath) {
+      Texture2DInfo info = loadImage(resPath);
+      width = info.width;
+      height = info.height;
+      nrOfChannels = info.nrOfChannels;
+      data = info.data;
+    }
+
+    return *this;
+  }
+
+  void delRes() {
+    if (resPath)
+      free(data);
+  }
 };
 
-std::string readFile(const char *filepath);
+struct dispatchedString {
+  std::string data;
 
-Texture2DInfo loadImage(const char *filepath, int nrOfChannels = 0);
+  const char *resPath;
+  std::string& getRes() {
+    if (resPath)
+      data = std::move(readFile(resPath));
 
-// image resource dispatcher - will load image from file if filepath is
-// specified, otherwise it is assumed that provided resource contains data
-template <const char *filepath = 0>
-Texture2DInfo &getImgSrc(Texture2DInfo &resource) {
-  if (filepath) {
-    resource = loadImage(filepath);
+    return data;
   }
-  return resource;
-}
+
+  void delRes() {
+    if (resPath)
+      delete &data;
+  }
+};
 
 } // namespace bgl

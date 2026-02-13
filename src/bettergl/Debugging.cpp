@@ -82,7 +82,8 @@ inline void APIENTRY GLDEBUGFUNC(GLenum source_, GLenum type_, GLuint id,
     break;
   }
 
-  std::cout << type << "/" << severity << " \x1b[32m[\x1b[33m" << SCOPE.back()
+  std::cout << type << "/" << severity << " \x1b[32m[\x1b[33m"
+            << (SCOPE.size() > 0 ? SCOPE.back() : "")
             << "\x1b[32m]\x1b[0m OpenGL source: \x1b[33m" << source
             << "\x1b[0m message: " << message << "\n";
 }
@@ -122,7 +123,8 @@ void beginDebugGroup(GLuint message_id, const char *name, GLsizei name_length) {
 }
 
 void endDebugGroup() {
-  SCOPE.pop_back();
+  if (SCOPE.size() > 0)
+    SCOPE.pop_back();
   if (OPENGL_CORE_DBG_SUPPORT)
     glPopDebugGroup();
   else if (GLAD_GL_KHR_debug)

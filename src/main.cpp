@@ -30,6 +30,8 @@
 #include <bettergl/Debugging.hpp>
 #include <glad/glad.h>
 
+#include "vertex.glsl.hpp"
+
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -116,7 +118,7 @@ int main(void) {
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
   bgl::endDebugGroup();
 
-  bgl::Program program = bgl::createProgram("main program", vertex_shader_text,
+  bgl::Program program = bgl::createProgram("main program", vertex.getRes().c_str(),
                                             fragment_shader_text)
                              .unwrapExit();
 

@@ -9,32 +9,14 @@
 int main(int argc, char *argv[]) {
   const char *varname = argv[1];
   const char *input = argv[2];
-  std::string output;
-  output.assign(argv[3], std::strlen(argv[3]));
+  std::string output(argv[3]);
+  const char build_mode = *argv[4];
 
-  std::fstream f;
-  f.open(input);
-  f.seekg(0, std::ios::end);
-  int length = f.tellg();
-  f.seekg(0, std::ios::beg);
-  char *data = (char*)std::calloc(length, sizeof(char));
-
-  f.read(data, length);
-  f.close();
-
-  std::cout << " +-----------Byte packer-----------\n"
-            << " | input file:  \x1b[36m" << input << "\x1b[0m\n"
-            << " | output file: \x1b[36m" << output << "\x1b[0m\n"
-            << " | byte length: \x1b[35m" << length << "\x1b[0m\n"
-            << " +---------------------------------\n";
-
-  char *sb = new char[length * 4];
-  char *data_end = &data[length - 1];
-  char *sbptr = sb;
-  for (char *ptr = data; ptr < data_end; ptr++) {
-    snprintf(sbptr, 5, "\\x%0.2x", *ptr);
-    sbptr += 4;
-  }
+  if (build_mode == 'd')
+    std::cout << " +-----------Byte packer-----------\n"
+              << " | input file:  \x1b[36m" << input << "\x1b[0m\n"
+              << " | output file: \x1b[36m" << output << "\x1b[0m\n"
+              << " +---------------------------------\n";
 
   std::string headerpath = output + ".hpp";
   std::string cppath = output + ".cpp";
@@ -42,16 +24,53 @@ int main(int argc, char *argv[]) {
   std::FILE *header = std::fopen(headerpath.c_str(), "w");
   std::fprintf(header,
                "#pragma once\n"
-               "extern const char* %s;",
-               varname);
+               "#include <bettergl/Assets.hpp>\n\n"
+               "#ifndef NDEBUG\n"
+               "inline bgl::dispatchedString %s = {0, \"%s\"};\n"
+               "#else\n"
+               "extern bgl::dispatchedString %s;\n"
+               "#endif",
+               varname, input, varname);
   std::fclose(header);
 
-  std::FILE *cppfile = std::fopen(cppath.c_str(), "w");
-  std::fprintf(cppfile,
-               "#include \"%s\"\n"
-               "const char* %s = \"%s\";",
-               headerpath.c_str(), varname, sb);
-  std::fclose(cppfile);
-  free(data);
-  delete[] sb;
+  if (build_mode == 'd') {
+    std::FILE *file = std::fopen(cppath.c_str(), "w");
+    std::fclose(file);
+  }
+
+  if (build_mode == 'r') {
+    std::fstream f;
+    f.open(input);
+    f.seekg(0, std::ios::end);
+    int length = f.tellg();
+    f.seekg(0, std::ios::beg);
+    char *data = (char *)std::calloc(length, sizeof(char));
+
+    f.read(data, length);
+    f.close();
+
+    std::cout << " +-----------Byte packer-----------\n"
+              << " | input file:  \x1b[36m" << input << "\x1b[0m\n"
+              << " | output file: \x1b[36m" << output << "\x1b[0m\n"
+              << " | byte length: \x1b[35m" << length << "\x1b[0m\n"
+              << " +---------------------------------\n";
+
+    char *sb = new char[length * 4];
+    char *data_end = &data[length - 1];
+    char *sbptr = sb;
+    for (char *ptr = data; ptr < data_end; ptr++) {
+      snprintf(sbptr, 5, "\\x%0.2x", *ptr);
+      sbptr += 4;
+    }
+
+    std::FILE *cppfile = std::fopen(cppath.c_str(), "w");
+    std::fprintf(cppfile,
+                 "#include \"%s\"\n"
+                 "#include <bettergl/Assets.hpp>\n"
+                 "bgl::dispatchedString %s = {\"%s\", 0};",
+                 headerpath.c_str(), varname, sb);
+    std::fclose(cppfile);
+    free(data);
+    delete[] sb;
+  }
 }

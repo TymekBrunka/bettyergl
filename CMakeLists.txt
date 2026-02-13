@@ -7,6 +7,7 @@ target_include_directories(glad PUBLIC glad/include)
 
 add_subdirectory(src/bettergl)
 
+bytepack(vertex src/shaders/vertex.glsl vertex.glsl d)
 add_executable(main src/main.cpp)
 # add_executable(main src/opengl_triangle.cpp)
-target_link_libraries(main glad glfw betterGL)
+target_link_libraries(main glad glfw betterGL vertex)
