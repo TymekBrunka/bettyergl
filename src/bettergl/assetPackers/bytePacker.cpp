@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
                "#pragma once\n"
                "#include <bettergl/Assets.hpp>\n\n"
                "#ifndef NDEBUG\n"
-               "inline bgl::dispatchedString %s = {0, \"%s\"};\n"
+               "inline bgl::dispatchedString %s = {std::string{}, \"%s\"};\n"
                "#else\n"
                "extern bgl::dispatchedString %s;\n"
                "#endif",

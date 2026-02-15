@@ -1,4 +1,5 @@
-function(imgpack name input output flip channels build_mode)
+function(byterGL_imgpack name input output flip channels build_mode)
+  message("Image packing ${name}")
   if( build_mode STREQUAL "d")
     add_custom_command(
       OUTPUT ${output}.hpp ${output}.cpp
@@ -20,11 +21,13 @@ function(imgpack name input output flip channels build_mode)
 	add_library(${name} STATIC ${output}.cpp)
 	add_dependencies(${name} ${name}_file)
 	target_link_libraries(${name} glad stb_image)
-	target_include_directories(${name} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/ ${CMAKE_BINARY_DIR})
+  message(${BETTERGL_ROOT_DIR})
+  target_include_directories(${name} PUBLIC ${betterGL_SOURCE_DIR}/include/ ${CMAKE_BINARY_DIR})
 
-endfunction(imgpack)
+endfunction()
 
-function(bytepack name input output build_mode)
+function(betterGL_bytepack name input output build_mode)
+  message("Byte packing ${name}")
   if( build_mode STREQUAL "d")
     add_custom_command(
       OUTPUT ${output}.hpp ${output}.cpp
@@ -45,6 +48,6 @@ function(bytepack name input output build_mode)
 	add_custom_target(${name}_file DEPENDS ${output}.cpp)
 	add_library(${name} STATIC ${output}.cpp)
 	add_dependencies(${name} ${name}_file)
-	target_include_directories(${name} PUBLIC ${CMAKE_BINARY_DIR})
+  target_include_directories(${name} PUBLIC ${betterGL_SOURCE_DIR}/include/ ${CMAKE_BINARY_DIR})
 
-endfunction(bytepack)
+endfunction()

@@ -3,7 +3,6 @@
 #include <cstdio>
 #include <fstream>
 #include <stb_image.h>
-#include <iostream>
 namespace bgl {
 
 std::string readFile(const char *filepath) {
@@ -13,13 +12,10 @@ std::string readFile(const char *filepath) {
   size_t length = file.tellg();
   file.seekg(0, std::ios::beg);
 
-  const char *data_ = (const char *)calloc(1, length);
+  char *data_ = (char *)calloc(1, length);
+  file.read(data_, length);
   std::string data(data_, length);
-  file.read(data.data(), length);
   file.close();
-
-  std::cout << data << "\n";
-
   return data;
 }
 

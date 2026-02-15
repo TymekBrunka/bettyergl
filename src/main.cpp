@@ -30,6 +30,7 @@
 #include <bettergl/Debugging.hpp>
 #include <glad/glad.h>
 
+#include "fragment.glsl.hpp"
 #include "vertex.glsl.hpp"
 
 #include <stddef.h>
@@ -47,26 +48,6 @@ typedef struct Vertex {
 static const Vertex vertices[3] = {{{-0.6f, -0.4f}, {1.f, 0.f, 0.f}},
                                    {{0.6f, -0.4f}, {0.f, 1.f, 0.f}},
                                    {{0.f, 0.6f}, {0.f, 0.f, 1.f}}};
-
-static const char *vertex_shader_text =
-    "#version 330\n"
-    "uniform mat4 MVP;\n"
-    "in vec3 vCol;\n"
-    "in vec2 vPos;\n"
-    "out vec3 color;\n"
-    "void main()\n"
-    "{\n"
-    "    gl_Position = vec4(vPos, 0.0, 1.0);\n"
-    "    color = vCol;\n"
-    "}\n";
-
-static const char *fragment_shader_text = "#version 330\n"
-                                          "in vec3 color;\n"
-                                          "out vec4 fragment;\n"
-                                          "void main()\n"
-                                          "{\n"
-                                          "    fragment = vec4(color, 1.0);\n"
-                                          "}\n";
 
 static void error_callback(int error, const char *description) {
   fprintf(stderr, "Error: %s\n", description);
@@ -87,7 +68,7 @@ int main(void) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true); 
+  glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
   GLFWwindow *window =
       glfwCreateWindow(640, 480, "OpenGL Triangle", NULL, NULL);
@@ -103,24 +84,25 @@ int main(void) {
   glfwSwapInterval(1);
   bgl::setUpDebugger();
 
-  GLint numExtensions;
-  glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
-  std::cout << "- Extensions" << std::endl;
-  for (GLint i = 0; i < numExtensions; i++) {
-    std::cout << glGetStringi(GL_EXTENSIONS, i) << std::endl;
-  }
+  // GLint numExtensions;
+  // glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
+  // std::cout << "- Extensions" << std::endl;
+  // for (GLint i = 0; i < numExtensions; i++) {
+  //   std::cout << glGetStringi(GL_EXTENSIONS, i) << std::endl;
+  // }
 
   bgl::beginDebugGroup(1, "setting up vbo");
-
   GLuint vertex_buffer;
   glGenBuffers(1, &vertex_buffer);
+  bgl::labelObject(GL_ARRAY_BUFFER, vertex_buffer, "vertex buffer");
   glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
   bgl::endDebugGroup();
 
-  bgl::Program program = bgl::createProgram("main program", vertex.getRes().c_str(),
-                                            fragment_shader_text)
-                             .unwrapExit();
+  bgl::Program program =
+      bgl::createProgram("main program", vertex.getRes().c_str(),
+                         fragment.getRes().c_str())
+          .unwrapExit();
 
   const GLint mvp_location = glGetUniformLocation(program, "MVP");
   const GLint vpos_location = glGetAttribLocation(program, "vPos");
@@ -130,6 +112,7 @@ int main(void) {
 
   GLuint vertex_array;
   glGenVertexArrays(1, &vertex_array);
+  bgl::labelObject(GL_VERTEX_ARRAY, vertex_array, "vertex array");
   glBindVertexArray(vertex_array);
   glEnableVertexAttribArray(vpos_location);
   glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
@@ -145,14 +128,12 @@ int main(void) {
     const float ratio = width / (float)height;
 
     bgl::beginDebugGroup(1, "rendering triangle");
-
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(program);
     glBindVertexArray(vertex_array);
     glDrawArrays(GL_TRIANGLES, 0, 3);
-
     bgl::endDebugGroup();
 
     glfwSwapBuffers(window);
