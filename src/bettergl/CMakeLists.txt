@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.23)
 project(betterGL LANGUAGES CXX C)
 
+add_library(glad glad/src/glad.c)
+target_include_directories(glad PUBLIC glad/include)
+
 add_library(stbimage stb/stb_image.c)
 target_include_directories(stbimage PUBLIC stb/)
 
