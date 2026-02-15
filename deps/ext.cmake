@@ -1,4 +1,5 @@
 include(deps/CPM.cmake)
+set(CPM_USE_LOCAL_PACKAGES ON)
 
 find_program(CCACHE_PROGRAM ccache)
 if (CCACHE_PROGRAM)
