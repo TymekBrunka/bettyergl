@@ -3,7 +3,7 @@ set(CPM_USE_LOCAL_PACKAGES ON)
 
 find_program(CCACHE_PROGRAM ccache)
 if (CCACHE_PROGRAM)
-  message(found)
+  message("Ccache enabled")
   set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM} base_dir=${PROJECT_SOURCE_DIR} hash_dir=false)
   set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM} base_dir=${PROJECT_SOURCE_DIR} hash_dir=false)
 endif()

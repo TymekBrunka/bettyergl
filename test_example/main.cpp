@@ -94,8 +94,8 @@ int main(void) {
   bgl::beginDebugGroup(1, "setting up vbo");
   GLuint vertex_buffer;
   glGenBuffers(1, &vertex_buffer);
-  bgl::labelObject(GL_ARRAY_BUFFER, vertex_buffer, "vertex buffer");
   glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+  bgl::labelObject(GL_ARRAY_BUFFER, vertex_buffer, "vertex buffer");
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
   bgl::endDebugGroup();
 
