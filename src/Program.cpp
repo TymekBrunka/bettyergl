@@ -111,9 +111,7 @@ Result<Program> createProgram(const char *name,
   }
 
   Program program = glCreateProgram();
-  catchError();
   labelObject(GL_PROGRAM, program, name);
-  catchError();
   glAttachShader(program, vertex_shader_.self);
   glAttachShader(program, fragment_shader_.self);
 

@@ -95,14 +95,15 @@ int main(void) {
   GLuint vertex_buffer;
   glGenBuffers(1, &vertex_buffer);
   glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-  bgl::labelObject(GL_ARRAY_BUFFER, vertex_buffer, "vertex buffer");
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
   bgl::endDebugGroup();
 
+  bgl::beginDebugGroup(1, "gex");
   bgl::Program program =
       bgl::createProgram("main program", vertex.getRes().c_str(),
                          fragment.getRes().c_str())
           .unwrapExit();
+  bgl::endDebugGroup();
 
   const GLint mvp_location = glGetUniformLocation(program, "MVP");
   const GLint vpos_location = glGetAttribLocation(program, "vPos");

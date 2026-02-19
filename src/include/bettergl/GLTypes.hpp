@@ -37,7 +37,8 @@ template <typename T> struct Result {
     if (error_msg.empty())
       return self;
 
-    std::cout << "\x1b[31mE\x1b[0m OpenGL \x1b[32m[\x1b[33m" << SCOPE.back()
+    std::cout << "\x1b[31mE\x1b[0m OpenGL \x1b[32m[\x1b[33m"
+              << (SCOPE.size() > 0 ? SCOPE.back() : "")
               << "\x1b[32m]\x1b[0m at \x1b[33m" << l.file_name()
               << "\x1b[31m:" << l.line() << ":" << l.column()
               << "\x1b[0m: " << error_msg << "\n";
@@ -48,7 +49,9 @@ template <typename T> struct Result {
   T unwrapExit(std::source_location l = std::source_location::current()) {
     if (error_msg.empty())
       return self;
-    std::cout << "\x1b[31mE\x1b[0m OpenGL \x1b[32m[\x1b[33m" << SCOPE.back()
+
+    std::cout << "\x1b[31mE\x1b[0m OpenGL \x1b[32m[\x1b[33m"
+              << (SCOPE.size() > 0 ? SCOPE.back() : "")
               << "\x1b[32m]\x1b[0m at \x1b[33m" << l.file_name()
               << "\x1b[31m:" << l.line() << ":" << l.column()
               << "\x1b[0m: " << error_msg << "\n";

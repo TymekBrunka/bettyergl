@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdio>
+#include <iostream>
 #include <string>
 namespace bgl {
 
@@ -39,7 +40,6 @@ struct dispatchedString {
   std::string& getRes() {
     if (resPath)
       data = std::move(readFile(resPath));
-
     return data;
   }
 

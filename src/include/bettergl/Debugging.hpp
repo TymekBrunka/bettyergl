@@ -59,7 +59,7 @@ void catchError(const char *call_description = 0,
   }
 
   std::cout << "\x1b[31mE\x1b[0m OpenGL \x1b[31m" << error
-            << " \x1b[32m[\x1b[33m" << SCOPE.back();
+            << " \x1b[32m[\x1b[33m" << (SCOPE.size() > 0 ? SCOPE.back() : "");
   if (call_description) {
     std::cout << ".\x1b[34m" << call_description;
   }

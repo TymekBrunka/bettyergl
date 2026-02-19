@@ -9,13 +9,14 @@ std::string readFile(const char *filepath) {
   std::fstream file;
   file.open(filepath);
   file.seekg(0, std::ios::end);
-  size_t length = file.tellg();
+  int length = file.tellg();
   file.seekg(0, std::ios::beg);
 
-  char *data_ = (char *)calloc(1, length);
+  char *data_ = (char *)std::calloc(1, length);
   file.read(data_, length);
-  std::string data(data_, length);
   file.close();
+
+  std::string data(data_, length);
   return data;
 }
 
