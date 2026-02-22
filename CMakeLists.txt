@@ -16,11 +16,11 @@ add_library(betterGL
 )
 
 add_executable(imgPack src/assetPackers/imagePacker.cpp)
-target_include_directories(imgPack PUBLIC src/include)
+# target_include_directories(imgPack PUBLIC src/include)
 target_link_libraries(imgPack PRIVATE stbimage)
 
 add_executable(bytePack src/assetPackers/bytePacker.cpp)
-target_include_directories(bytePack PUBLIC src/include)
+# target_include_directories(bytePack PUBLIC src/include)
 
 include(src/assetPackers/assetPackers.cmake)
 
