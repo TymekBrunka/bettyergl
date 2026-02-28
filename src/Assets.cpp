@@ -20,12 +20,39 @@ std::string readFile(const char *filepath) {
   return data;
 }
 
-Texture2DInfo loadImage(const char *filepath,
-                                         int nrOfChannels_) {
+Texture2DInfo loadImage(const char *filepath, int nrOfChannels_) {
   int width, height, nrOfChannels;
   unsigned char *data =
       stbi_load(filepath, &width, &height, &nrOfChannels, nrOfChannels_);
   return {.width = width, .height = height, .nrOfChannels = nrOfChannels};
+}
+
+Texture2DInfo &Texture2DInfo::getRes() {
+  if (resPath) {
+    Texture2DInfo info = loadImage(resPath);
+    width = info.width;
+    height = info.height;
+    nrOfChannels = info.nrOfChannels;
+    data = info.data;
+  }
+
+  return *this;
+}
+
+void Texture2DInfo::delRes() {
+  if (resPath)
+    free(data);
+}
+
+std::string &dispatchedString::getRes() {
+  if (resPath)
+    data = std::move(readFile(resPath));
+  return data;
+}
+
+void dispatchedString::delRes() {
+  if (resPath)
+    delete &data;
 }
 
 } // namespace bgl

@@ -29,16 +29,19 @@ int main(int argc, char *argv[]) {
 
   std::cout << headerpath << "\n";
   std::FILE *header = std::fopen(headerpath.c_str(), "w");
-  std::fprintf(header,
-               "#pragma once\n"
-               "#include \"<bettergl/AssetTypes.hpp>\"\n\n"
-               "#ifndef NDEBUG\n"
-               "inline bgl::Texture2DResource %s = {0, 0, %d, (const "
-               "unsigned char*)0, \"%s\"};\n"
-               "#else\n"
-               "extern bgl::Texture2DResource %s;\n"
-               "#endif",
-               varname, input, channels, varname);
+  std::fprintf(header, "#pragma once\n"
+                       "#include \"<bettergl/AssetTypes.hpp>\"\n\n");
+  if (build_mode == 'd')
+    std::fprintf(header,
+                 "#ifndef NDEBUG\n"
+                 "inline bgl::Texture2DResource %s = {0, 0, %d, (const "
+                 "unsigned char*)0, \"%s\"};\n"
+                 "#else\n"
+                 "extern bgl::Texture2DResource %s;\n"
+                 "#endif",
+                 varname, channels, input, varname);
+  else
+    std::fprintf(header, "extern bgl::Texture2DResource %s;\n", varname);
   std::fclose(header);
 
   if (build_mode == 'd') {

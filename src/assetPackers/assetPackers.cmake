@@ -36,11 +36,11 @@ function(byterGL_imgpack name input output flip channels)
     VERBATIM
   )
 
-  add_custom_target(${name}_file DEPENDS ${output}.cpp)
-  add_library(${name} STATIC ${output}.cpp)
+  add_custom_target(${name}_file DEPENDS "${output}.cpp")
+  add_library(${name} STATIC "${output}.cpp")
   add_dependencies(${name} ${name}_file)
   target_link_libraries(${name} glad stb_image)
-  target_include_directories(${name} PUBLIC ${betterGL_SOURCE_DIR}/include/ ${CMAKE_CURRENT_BINARY_DIR})
+  target_include_directories(${name} PUBLIC "${betterGL_SOURCE_DIR}/src/include/" ${CMAKE_CURRENT_BINARY_DIR})
 
 endfunction()
 
@@ -85,9 +85,9 @@ function(betterGL_bytepack name input output)
     VERBATIM
   )
 
-  add_custom_target(${name}_file DEPENDS ${output}.cpp)
-  add_library(${name} STATIC ${output}.cpp)
+  add_custom_target(${name}_file DEPENDS "${output}.cpp")
+  add_library(${name} STATIC "${output}.cpp")
   add_dependencies(${name} ${name}_file)
-  target_include_directories(${name} PUBLIC ${betterGL_SOURCE_DIR}/include/ ${CMAKE_CURRENT_BINARY_DIR})
+  target_include_directories(${name} PUBLIC "${betterGL_SOURCE_DIR}/src/include/" ${CMAKE_CURRENT_BINARY_DIR})
 
 endfunction()

@@ -15,38 +15,18 @@ struct Texture2DInfo {
   unsigned char *data;
 
   const char *resPath;
-  Texture2DInfo &getRes() {
-    if (resPath) {
-      Texture2DInfo info = loadImage(resPath);
-      width = info.width;
-      height = info.height;
-      nrOfChannels = info.nrOfChannels;
-      data = info.data;
-    }
 
-    return *this;
-  }
-
-  void delRes() {
-    if (resPath)
-      free(data);
-  }
+  Texture2DInfo &getRes();
+  void delRes();
 };
 
 struct dispatchedString {
   std::string data;
 
   const char *resPath;
-  std::string& getRes() {
-    if (resPath)
-      data = std::move(readFile(resPath));
-    return data;
-  }
+  std::string &getRes();
 
-  void delRes() {
-    if (resPath)
-      delete &data;
-  }
+  void delRes();
 };
 
 } // namespace bgl

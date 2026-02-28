@@ -22,15 +22,19 @@ int main(int argc, char *argv[]) {
   std::string cppath = output + ".cpp";
 
   std::FILE *header = std::fopen(headerpath.c_str(), "w");
-  std::fprintf(header,
-               "#pragma once\n"
-               "#include <bettergl/Assets.hpp>\n\n"
-               "#ifndef NDEBUG\n"
-               "inline bgl::dispatchedString %s = {std::string{}, \"%s\"};\n"
-               "#else\n"
-               "extern bgl::dispatchedString %s;\n"
-               "#endif",
-               varname, input, varname);
+  std::fprintf(header, "#pragma once\n"
+                       "#include <bettergl/Assets.hpp>\n\n");
+
+  if (build_mode == 'd')
+    std::fprintf(header,
+                 "#ifndef NDEBUG\n"
+                 "inline bgl::dispatchedString %s = {std::string{}, \"%s\"};\n"
+                 "#else\n"
+                 "extern bgl::dispatchedString %s;\n"
+                 "#endif",
+                 varname, input, varname);
+  else
+    std::fprintf(header, "extern bgl::dispatchedString %s;\n", varname);
   std::fclose(header);
 
   if (build_mode == 'd') {
