@@ -9,7 +9,7 @@ if (CCACHE_PROGRAM)
 endif()
 
 CPMAddPackage(
-  NAME glfw
+  NAME glfw3
   VERSION 3.4
   GITHUB_REPOSITORY glfw/glfw
   GIT_TAG 3.4
