@@ -8,13 +8,16 @@ if (CCACHE_PROGRAM)
   set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM} base_dir=${PROJECT_SOURCE_DIR} hash_dir=false)
 endif()
 
-CPMAddPackage(
-  NAME glfw3
-  VERSION 3.4
-  GITHUB_REPOSITORY glfw/glfw
-  GIT_TAG 3.4
-  OPTIONS
-    "GLFW_BUILD_EXAMPLES OFF"
-    "GLFW_BUILD_TESTS OFF"
-    "GLFW_BUILD_DOCS OFF"
-)
+find_package(glfw3 QUIET)
+if (NOT glfw3)
+  CPMAddPackage(
+    NAME glfw
+    VERSION 3.4
+    GITHUB_REPOSITORY glfw/glfw
+    GIT_TAG 3.4
+    OPTIONS
+      "GLFW_BUILD_EXAMPLES OFF"
+      "GLFW_BUILD_TESTS OFF"
+      "GLFW_BUILD_DOCS OFF"
+  )
+endif()
