@@ -9,7 +9,7 @@ if (CCACHE_PROGRAM)
 endif()
 
 find_package(glfw3 QUIET)
-if (NOT glfw3)
+if (NOT glfw3_FOUND)
   CPMAddPackage(
     NAME glfw
     VERSION 3.4
