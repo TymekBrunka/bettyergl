@@ -1,14 +1,14 @@
 #pragma once
-#include <glad/glad.h>
 #include <iostream>
 #include <source_location>
 #include <vector>
+#include <GL/glew.h>
 namespace bgl {
 
 extern std::vector<const char*> SCOPE;
 extern bool OPENGL_CORE_DBG_SUPPORT;
 
-bool setUpDebugger();
+bool setUp();
 
 void labelObject(GLenum type, GLuint object, const char *label,
                  GLsizei label_lenght = -1);

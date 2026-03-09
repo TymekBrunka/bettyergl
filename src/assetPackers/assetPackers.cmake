@@ -5,17 +5,17 @@ function(byterGL_imgpack name input output flip channels)
   # if( build_mode STREQUAL "d")
   #   add_custom_command(
   #     OUTPUT ${output}.hpp ${output}.cpp
-  #     COMMAND imgpack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} ${channels} ${flip} d
+  #     COMMAND bettergl_imgpack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} ${channels} ${flip} d
   #
-  #     DEPENDS imgPack
+  #     DEPENDS bettergl_imgPack
   #     VERBATIM
   #   )
   # else()
   #   add_custom_command(
   #     OUTPUT ${output}.hpp ${output}.cpp
-  #     COMMAND imgpack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} ${channels} ${flip} r
+  #     COMMAND bettergl_imgpack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} ${channels} ${flip} r
   #
-  #     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input} imgPack
+  #     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input} bettergl_imgPack
   #     VERBATIM
   #   )
   # endif()
@@ -30,16 +30,16 @@ function(byterGL_imgpack name input output flip channels)
 
   add_custom_command(
     OUTPUT ${output}.hpp ${output}.cpp
-    COMMAND imgpack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} ${channels} ${flip} ${build_mode}
+    COMMAND bettergl_imgpack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} ${channels} ${flip} ${build_mode}
 
-    DEPENDS $<IF:${isreal},${CMAKE_CURRENT_SOURCE_DIR}/${input},> imgPack
+    DEPENDS $<IF:${isreal},${CMAKE_CURRENT_SOURCE_DIR}/${input},> bettergl_imgPack
     VERBATIM
   )
 
   add_custom_target(${name}_file DEPENDS "${output}.cpp")
   add_library(${name} STATIC "${output}.cpp")
   add_dependencies(${name} ${name}_file)
-  target_link_libraries(${name} glad stb_image)
+  target_link_libraries(${name} glew bettergl_stbimage)
   target_include_directories(${name} PUBLIC "${betterGL_SOURCE_DIR}/src/include/" ${CMAKE_CURRENT_BINARY_DIR})
 
 endfunction()
@@ -51,17 +51,17 @@ function(betterGL_bytepack name input output)
   # if( build_mode STREQUAL "d")
   #   add_custom_command(
   #     OUTPUT ${output}.hpp ${output}.cpp
-  #     COMMAND bytePack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} d
+  #     COMMAND bettergl_bytePack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} d
   #
-  #     DEPENDS bytePack
+  #     DEPENDS bettergl_bytePack
   #     VERBATIM
   #   )
   # else()
   #   add_custom_command(
   #     OUTPUT ${output}.hpp ${output}.cpp
-  #     COMMAND bytePack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} r
+  #     COMMAND bettergl_bytePack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} r
   #
-  #     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input} bytePack
+  #     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input} bettergl_bytePack
   #     VERBATIM
   #   )
   # endif()
@@ -78,10 +78,10 @@ function(betterGL_bytepack name input output)
 
   add_custom_command(
     OUTPUT ${output}.hpp ${output}.cpp
-    COMMAND bytePack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} ${build_mode}
+    COMMAND bettergl_bytePack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} ${build_mode}
 
-    # DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input} bytePack
-    DEPENDS $<IF:${isreal},${CMAKE_CURRENT_SOURCE_DIR}/${input},> bytePack
+    # DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input} bettergl_bytePack
+    DEPENDS $<IF:${isreal},${CMAKE_CURRENT_SOURCE_DIR}/${input},> bettergl_bytePack
     VERBATIM
   )
 

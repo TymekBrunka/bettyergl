@@ -1,6 +1,6 @@
 #pragma once
 #include <bettergl/GLTypes.hpp>
-#include <glad/glad.h>
+#include <GL/glew.h>
 namespace bgl {
 
 Result<Shader> createShader(GLenum shader_type, const char *source);

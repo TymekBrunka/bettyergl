@@ -28,7 +28,6 @@
 #include "bettergl/Program.hpp"
 #include <GLFW/glfw3.h>
 #include <bettergl/Debugging.hpp>
-#include <glad/glad.h>
 
 #include "fragment.glsl.hpp"
 #include "vertex.glsl.hpp"
@@ -80,9 +79,9 @@ int main(void) {
   glfwSetKeyCallback(window, key_callback);
 
   glfwMakeContextCurrent(window);
-  gladLoadGL(); // only then we can load
   glfwSwapInterval(1);
-  bgl::setUpDebugger();
+
+  bgl::setUp();
 
   // GLint numExtensions;
   // glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
