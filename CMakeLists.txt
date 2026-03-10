@@ -15,11 +15,13 @@ option(BETTERGL_CUSTOM_GLAD4 "custom glad target - updating requires rebuilding 
 if (NOT BETTERGL_CUSTOM_GLAD4 STREQUAL OFF)
   target(bettergl_glad ALIAS ${BETTERGL_CUSTOM_GLAD4})
 else()
-  add_library(bettergl_glad src/glad/src/glad.c)
+  add_library(bettergl_glad OBJECT src/glad/src/glad.c)
+  target_compile_options(bettergl_glad PRIVATE -fPIC)
   target_include_directories(bettergl_glad PUBLIC src/glad/include)
 endif()
 
-add_library(bettergl_stbimage src/stb/stb_image.c)
+add_library(bettergl_stbimage OBJECT src/stb/stb_image.c)
+target_compile_options(bettergl_stbimage PRIVATE -fPIC)
 target_include_directories(bettergl_stbimage PUBLIC src/stb/)
 
 add_executable(bettergl_imgPack src/assetPackers/imagePacker.cpp)
@@ -48,6 +50,7 @@ if (BETTERGL_BUILD_DYNAMIC)
     src/Program.cpp
     src/Assets.cpp
   )
+  # target_compile_options(betterGL_dynamic PRIVATE -fPIC)
   target_include_directories(betterGL_dynamic PUBLIC src/include)
   target_link_libraries(betterGL_dynamic bettergl_glad bettergl_stbimage)
   target_compile_features(betterGL_dynamic PUBLIC cxx_std_20)
