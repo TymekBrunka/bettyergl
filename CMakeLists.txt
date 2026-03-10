@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.23)
 project(betterGL
   LANGUAGES CXX C
-  VERSION 0.0.3
+  VERSION 0.0.4
 )
 include(deps/ext.cmake)
 
