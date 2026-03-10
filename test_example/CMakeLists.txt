@@ -6,4 +6,4 @@ betterGL_bytepack(fragment shaders/fragment.glsl fragment.glsl)
 
 add_executable(main main.cpp)
 # add_executable(main src/opengl_triangle.cpp)
-target_link_libraries(main glfw betterGL vertex fragment)
+target_link_libraries(main glfw betterGL_dynamic vertex fragment)
