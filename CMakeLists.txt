@@ -39,6 +39,6 @@ target_include_directories(betterGL PUBLIC src/include)
 target_link_libraries(betterGL bettergl_glad bettergl_stbimage)
 target_compile_features(betterGL PUBLIC cxx_std_20)
 
-if (BETTERGL_BUILD_TEST_EXAMPLE)
+if (BETTERGL_BUILD_TEST_EXAMPLE STREQUAL ON)
   add_subdirectory(test_example)
 endif()
