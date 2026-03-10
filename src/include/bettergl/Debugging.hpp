@@ -7,6 +7,7 @@ namespace bgl {
 
 extern std::vector<const char*> SCOPE;
 extern bool OPENGL_CORE_DBG_SUPPORT;
+extern bool LOG_LABELS;
 
 bool setUpDebugger();
 

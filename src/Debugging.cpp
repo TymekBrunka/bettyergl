@@ -3,6 +3,7 @@ namespace bgl {
 
 std::vector<const char *> SCOPE;
 bool OPENGL_CORE_DBG_SUPPORT = false;
+bool LOG_LABELS = false;
 
 inline void APIENTRY GLDEBUGFUNC(GLenum source_, GLenum type_, GLuint id,
                                  GLenum severity_, GLsizei length,
@@ -11,6 +12,8 @@ inline void APIENTRY GLDEBUGFUNC(GLenum source_, GLenum type_, GLuint id,
   case 131185: // glBufferData
     return;
   }
+
+  if (type_ == GL_DEBUG_TYPE_MARKER_KHR && !LOG_LABELS) return;
 
   const char *type;
   const char *severity;
