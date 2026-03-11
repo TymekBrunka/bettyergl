@@ -75,8 +75,6 @@ function(bettergl_copy_library)
   endif()
 endfunction()
 
-bettergl_copy_library()
-
 if (BETTERGL_BUILD_TEST_EXAMPLE)
   message("bettergl building test example")
   add_subdirectory(test_example)
