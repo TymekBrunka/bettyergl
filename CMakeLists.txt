@@ -58,6 +58,20 @@ if (BETTERGL_BUILD_DYNAMIC)
   target_compile_features(betterGL_dynamic PUBLIC cxx_std_20)
 endif()
 
+function(bettergl_copy_library)
+  if (BETTERGL_BUILD_DYNAMIC)
+    add_custom_command(
+      TARGET betterGL_dynamic POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy 
+        $<TARGET_FILE:betterGL_dynamic>
+        # $<TARGET_FILE_DIR:betterGL_dynamic>
+        ${CMAKE_CURRENT_BINARY_DIR}/$<TARGET_FILE:betterGL_dynamic>
+    )
+  endif()
+endfunction()
+
+bettergl_copy_library(~/gex)
+
 if (BETTERGL_BUILD_TEST_EXAMPLE)
   message("bettergl building test example")
   add_subdirectory(test_example)
