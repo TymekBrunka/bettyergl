@@ -61,9 +61,9 @@ endif()
 function(bettergl_copy_library)
   if (BETTERGL_BUILD_DYNAMIC)
     add_custom_command(
-      TARGET betterGL_dynamic POST_BUILD
+      DEPENDS betterGL_dynamic
       COMMAND ${CMAKE_COMMAND} -E copy 
-        # $<TARGET_FILE_DIR:betterGL_dynamic>
+        $<TARGET_FILE:betterGL_dynamic>
         ${CMAKE_CURRENT_BINARY_DIR}/{CMAKE_SHARED_LIBRARY_PREFIX}betterGL_dynamic{CMAKE_SHARED_LIBRARY_SUFFIX}
     )
   endif()
