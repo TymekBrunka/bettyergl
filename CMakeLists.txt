@@ -63,14 +63,11 @@ function(bettergl_copy_library)
     add_custom_command(
       TARGET betterGL_dynamic POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy 
-        $<TARGET_FILE:betterGL_dynamic>
         # $<TARGET_FILE_DIR:betterGL_dynamic>
-        ${CMAKE_CURRENT_BINARY_DIR}/$<TARGET_FILE:betterGL_dynamic>
+        ${CMAKE_CURRENT_BINARY_DIR}/{CMAKE_SHARED_LIBRARY_PREFIX}betterGL_dynamic{CMAKE_SHARED_LIBRARY_SUFFIX}
     )
   endif()
 endfunction()
-
-bettergl_copy_library(~/gex)
 
 if (BETTERGL_BUILD_TEST_EXAMPLE)
   message("bettergl building test example")
