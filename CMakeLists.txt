@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.23)
 project(betterGL
   LANGUAGES CXX C
-  VERSION 0.0.5
+  VERSION 0.0.6
 )
 include(deps/ext.cmake)
 
@@ -58,20 +58,14 @@ if (BETTERGL_BUILD_DYNAMIC)
   target_compile_features(betterGL_dynamic PUBLIC cxx_std_20)
 endif()
 
-function(bettergl_copy_library)
-  if (BETTERGL_BUILD_DYNAMIC)
-    if (NOT DEFINED VARG0)
-      set(VARG0 ${CMAKE_CURRENT_BINARY_DIR})
-    endif()
-    message(STATUS ${VARG0}/${CMAKE_SHARED_LIBRARY_PREFIX}betterGL_dynamic${CMAKE_SHARED_LIBRARY_SUFFIX})
-    add_custom_command(
-      OUTPUT ${VARG0}/{CMAKE_SHARED_LIBRARY_PREFIX}betterGL_dynamic{CMAKE_SHARED_LIBRARY_SUFFIX}
-      DEPENDS betterGL_dynamic
-      COMMAND ${CMAKE_COMMAND} -E copy 
-        ${CMAKE_SHARED_LIBRARY_PREFIX}betterGL_dynamic${CMAKE_SHARED_LIBRARY_SUFFIX}
-        ${VARG0}
-    )
-    add_custom_target(betterGL_dynamic_dependant DEPENDS betterGL_dynamic)
+function(bettergl_cpdlls your_target)
+  if (${CMAKE_SYSTEM_NAME} MATCHES "^Windows")
+    add_custom_command(TARGET ${your_target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_RUNTIME_DLLS:${your_target}>
+        $<TARGET_FILE_DIR:${your_target}>
+        COMMAND_EXPAND_LISTS
+        COMMENT "Copying DLLs to target directory")
   endif()
 endfunction()
 
