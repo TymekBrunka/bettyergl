@@ -60,12 +60,15 @@ endif()
 
 function(bettergl_copy_library)
   if (BETTERGL_BUILD_DYNAMIC)
+    if (NOT DEFINED VARG0)
+      set(VARG0 ${CMAKE_BINARY_DIR})
+    endif()
     add_custom_command(
-      OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/{CMAKE_SHARED_LIBRARY_PREFIX}betterGL_dynamic{CMAKE_SHARED_LIBRARY_SUFFIX}
+      OUTPUT ${VARG0}/{CMAKE_SHARED_LIBRARY_PREFIX}betterGL_dynamic{CMAKE_SHARED_LIBRARY_SUFFIX}
       DEPENDS betterGL_dynamic
       COMMAND ${CMAKE_COMMAND} -E copy 
         $<TARGET_FILE:betterGL_dynamic>
-        ${CMAKE_CURRENT_BINARY_DIR}/{CMAKE_SHARED_LIBRARY_PREFIX}betterGL_dynamic{CMAKE_SHARED_LIBRARY_SUFFIX}
+        ${VARG0}/{CMAKE_SHARED_LIBRARY_PREFIX}betterGL_dynamic{CMAKE_SHARED_LIBRARY_SUFFIX}
     )
   endif()
 endfunction()
