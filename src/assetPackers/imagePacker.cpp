@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
   std::cout << headerpath << "\n";
   std::FILE *header = std::fopen(headerpath.c_str(), "w");
   std::fprintf(header, "#pragma once\n"
-                       "#include \"<bettergl/Assets.hpp>\"\n\n");
+                       "#include <bettergl/Assets.hpp>\n\n");
   if (build_mode == 'd')
     std::fprintf(header,
                  "#ifndef NDEBUG\n"
