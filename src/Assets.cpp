@@ -24,7 +24,7 @@ Texture2DInfo loadImage(const char *filepath, int nrOfChannels_) {
   int width, height, nrOfChannels;
   unsigned char *data =
       stbi_load(filepath, &width, &height, &nrOfChannels, nrOfChannels_);
-  return {.width = width, .height = height, .nrOfChannels = nrOfChannels};
+  return {.width = width, .height = height, .nrOfChannels = nrOfChannels, .data = data};
 }
 
 Texture2DInfo &Texture2DInfo::getRes() {
