@@ -1,4 +1,4 @@
-function(byterGL_imgpack name input output flip channels)
+function(betterGL_imgpack name input output flip channels)
   set(build_mode ${ARGV5})
   string(PREPEND output "${CMAKE_CURRENT_BINARY_DIR}/")
   message("Image packing ${name}")
