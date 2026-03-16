@@ -30,7 +30,7 @@ function(byterGL_imgpack name input output flip channels)
 
   add_custom_command(
     OUTPUT ${output}.hpp ${output}.cpp
-    COMMAND bettergl_imgpack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} ${channels} ${flip} ${build_mode}
+    COMMAND bettergl_imgPack ${name} ${CMAKE_CURRENT_SOURCE_DIR}/${input} ${output} ${channels} ${flip} ${build_mode}
 
     DEPENDS $<IF:${isreal},${CMAKE_CURRENT_SOURCE_DIR}/${input},> bettergl_imgPack
     VERBATIM
