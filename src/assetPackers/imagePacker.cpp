@@ -34,14 +34,14 @@ int main(int argc, char *argv[]) {
   if (build_mode == 'd')
     std::fprintf(header,
                  "#ifndef NDEBUG\n"
-                 "inline bgl::Texture2DResource %s = {0, 0, %d, (const "
+                 "inline bgl::Texture2DInfo %s = {0, 0, %d, (const "
                  "unsigned char*)0, \"%s\"};\n"
                  "#else\n"
-                 "extern bgl::Texture2DResource %s;\n"
+                 "extern bgl::Texture2DInfo %s;\n"
                  "#endif",
                  varname, channels, input, varname);
   else
-    std::fprintf(header, "extern bgl::Texture2DResource %s;\n", varname);
+    std::fprintf(header, "extern bgl::Texture2DInfo %s;\n", varname);
   std::fclose(header);
 
   if (build_mode == 'd') {
@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
     std::fprintf(
         cppfile,
         "#include \"%s.hpp\"\n"
-        "bgl::Texture2DResource %s = {%d, %d, %d, (unsigned char*)\"%s\", 0};",
+        "bgl::Texture2DInfo %s = {%d, %d, %d, (unsigned char*)\"%s\", 0};",
         output.c_str(), varname, width, height, nrChannels, sb);
     std::fclose(cppfile);
     stbi_image_free(data);
