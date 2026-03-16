@@ -34,8 +34,8 @@ int main(int argc, char *argv[]) {
   if (build_mode == 'd')
     std::fprintf(header,
                  "#ifndef NDEBUG\n"
-                 "inline bgl::Texture2DInfo %s = {0, 0, %d, (const "
-                 "unsigned char*)0, \"%s\"};\n"
+                 "inline bgl::Texture2DInfo %s = {0, 0, %d, (unsigned char*)0, "
+                 "\"%s\"};\n"
                  "#else\n"
                  "extern bgl::Texture2DInfo %s;\n"
                  "#endif",
