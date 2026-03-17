@@ -21,6 +21,20 @@ int main(int argc, char *argv[]) {
   std::string headerpath = output + ".hpp";
   std::string cppath = output + ".cpp";
 
+#ifdef _WIN32
+  size_t pos = headerpath.find("/");
+  while (pos != std::string::npos) {
+    headerpath.replace(pos, 1, "\\");
+    pos = headerpath.find("/", pos + 2);
+  }
+
+  pos = cppath.find("/");
+  while (pos != std::string::npos) {
+    cppath.replace(pos, 1, "\\");
+    pos = cppath.find("/", pos + 2);
+  }
+#endif
+
   std::FILE *header = std::fopen(headerpath.c_str(), "w");
   std::fprintf(header, "#pragma once\n"
                        "#include <bettergl/Assets.hpp>\n\n");
