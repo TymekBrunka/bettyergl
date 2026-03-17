@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[]) {
   const char *varname = argv[1];
-  const char *input = argv[2];
+  std::string input = argv[2];
   std::string output(argv[3]);
   const char build_mode = *argv[4];
 
@@ -22,16 +22,10 @@ int main(int argc, char *argv[]) {
   std::string cppath = output + ".cpp";
 
 #ifdef _WIN32
-  size_t pos = headerpath.find("/");
+  size_t pos = input.find("/");
   while (pos != std::string::npos) {
-    headerpath.replace(pos, 1, "\\");
-    pos = headerpath.find("/", pos + 2);
-  }
-
-  pos = cppath.find("/");
-  while (pos != std::string::npos) {
-    cppath.replace(pos, 1, "\\");
-    pos = cppath.find("/", pos + 2);
+    input.replace(pos, 1, "\\\\");
+    pos = input.find("/", pos + 2);
   }
 #endif
 
@@ -46,7 +40,7 @@ int main(int argc, char *argv[]) {
                  "#else\n"
                  "extern bgl::dispatchedString %s;\n"
                  "#endif",
-                 varname, input, varname);
+                 varname, input.c_str(), varname);
   else
     std::fprintf(header, "extern bgl::dispatchedString %s;\n", varname);
   std::fclose(header);

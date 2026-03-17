@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
   stbi_set_flip_vertically_on_load(do_flip == 'y');
   int width, height, nrChannels;
   const char *varname = argv[1];
-  const char *input = argv[2];
+  std::string input = argv[2];
   std::string output(argv[3]);
   int channels = std::atoi(argv[4]);
   const char build_mode = *argv[6];
@@ -28,16 +28,10 @@ int main(int argc, char *argv[]) {
   std::string cppath = output + ".cpp";
 
 #ifdef _WIN32
-  size_t pos = headerpath.find("/");
+  size_t pos = input.find("/");
   while (pos != std::string::npos) {
-    headerpath.replace(pos, 1, "\\");
-    pos = headerpath.find("/", pos + 2);
-  }
-
-  pos = cppath.find("/");
-  while (pos != std::string::npos) {
-    cppath.replace(pos, 1, "\\");
-    pos = cppath.find("/", pos + 2);
+    input.replace(pos, 1, "\\\\");
+    pos = input.find("/", pos + 2);
   }
 #endif
 
@@ -53,7 +47,7 @@ int main(int argc, char *argv[]) {
                  "#else\n"
                  "extern bgl::Texture2DInfo %s;\n"
                  "#endif",
-                 varname, channels, input, varname);
+                 varname, channels, input.c_str(), varname);
   else
     std::fprintf(header, "extern bgl::Texture2DInfo %s;\n", varname);
   std::fclose(header);
@@ -65,7 +59,7 @@ int main(int argc, char *argv[]) {
 
   if (build_mode == 'r') {
     unsigned char *data =
-        stbi_load(input, &width, &height, &nrChannels, channels);
+        stbi_load(input.c_str(), &width, &height, &nrChannels, channels);
 
     if (!data) {
       std::cout << "unable to load image: " << stbi_failure_reason() << "\n";
