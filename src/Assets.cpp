@@ -1,11 +1,15 @@
 #include <bettergl/Assets.hpp>
 #include <cstddef>
 #include <cstdio>
+#include <filesystem>
 #include <fstream>
 #include <stb_image.h>
 namespace bgl {
 
 std::string readFile(const char *filepath) {
+  if (!std::filesystem::exists(filepath)) {
+    throw std::string("Cant open file: \"") + filepath + "\"\n";
+  }
   std::fstream file;
   file.open(filepath);
   file.seekg(0, std::ios::end);
@@ -22,6 +26,9 @@ std::string readFile(const char *filepath) {
 
 Texture2DInfo loadImage(const char *filepath, int nrOfChannels_) {
   int width, height, nrOfChannels;
+  if (!std::filesystem::exists(filepath)) {
+    throw std::string("Cant open file: \"") + filepath + "\"\n";
+  }
   unsigned char *data =
       stbi_load(filepath, &width, &height, &nrOfChannels, nrOfChannels_);
   return {.width = width, .height = height, .nrOfChannels = nrOfChannels, .data = data};
