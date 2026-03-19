@@ -44,6 +44,8 @@ if (BETTERGL_BUILD_STATIC)
   target_include_directories(betterGL_static PUBLIC src/include)
   target_link_libraries(betterGL_static bettergl_glad bettergl_stbimage)
   target_compile_features(betterGL_static PUBLIC cxx_std_20)
+  target_compile_options(betterGL_static PRIVATE -fPIC)
+  target_link_options(betterGL_static PRIVATE -fPIC)
 endif()
 
 if (BETTERGL_BUILD_DYNAMIC)
